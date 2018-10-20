@@ -5,6 +5,8 @@
 技术选型
 
 Web层
+
+
 1.Servlet:控制前端页面跳转Servlet JSP, 
 
 2.HTML 静态页面  
@@ -17,6 +19,8 @@ Web层
 
 
 Service层
+
+
 1.Javamail: 发送email
 
 2.redis NOSQL 缓存数据库 
@@ -24,6 +28,8 @@ Service层
 3.Jedis Java语言操作redis
 
 Dao层
+
+
 1.MySQL 
 
 2.Druid 数据库连接池
