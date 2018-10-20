@@ -13,4 +13,8 @@ public interface UserService {
      * @return
      */
     boolean registUser(User user);
+
+    boolean active(String code);
+
+    User login(User user);
 }

@@ -21,4 +21,25 @@ public interface UserDao {
      * @param user
      */
     public void saveUser(User user);
+
+    /**
+     *  根据激活码查询用户
+     * @param code
+     * @return
+     */
+    User findByCode(String code);
+
+    /**
+     * 更新用户的激活状态
+     * @param user
+     */
+    void updateStatus(User user);
+
+    /**
+     * 根据用户的用户名和密码查询用户
+     * @param username
+     * @param password
+     * @return
+     */
+    User findUserByUsernameAndPassword(String username, String password);
 }

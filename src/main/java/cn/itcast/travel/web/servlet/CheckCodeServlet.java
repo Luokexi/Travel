@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -21,7 +22,8 @@ import java.util.Random;
 public class CheckCodeServlet extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-		
+
+
 		//服务器通知浏览器不要缓存
 		response.setHeader("pragma","no-cache");
 		response.setHeader("cache-control","no-cache");
@@ -34,7 +36,6 @@ public class CheckCodeServlet extends HttpServlet {
 		int width = 80;
 		int height = 30;
 		BufferedImage image = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
-		
 		//获取画笔
 		Graphics g = image.getGraphics();
 		//设置画笔颜色为灰色
@@ -44,9 +45,10 @@ public class CheckCodeServlet extends HttpServlet {
 		
 		//产生4个随机验证码，12Ey
 		String checkCode = getCheckCode();
-		//将验证码放入HttpSession中  CHECKCODE_SERVER
-		request.getSession().setAttribute("checkCodeServer",checkCode);
-		
+		//将验证码放入HttpSession中
+		HttpSession session = request.getSession();
+		session.setAttribute("checkCode",checkCode);
+
 		//设置画笔颜色为黄色
 		g.setColor(Color.YELLOW);
 		//设置字体的小大
@@ -64,7 +66,7 @@ public class CheckCodeServlet extends HttpServlet {
 	 * 产生4位随机字符串 
 	 */
 	private String getCheckCode() {
-		String base = "0123456789ABCDEFGabcdefghijklmnopqrstuvwxyz";
+		String base = "0123456789ABCDEFGHIJKLM";
 		int size = base.length();
 		Random r = new Random();
 		StringBuffer sb = new StringBuffer();

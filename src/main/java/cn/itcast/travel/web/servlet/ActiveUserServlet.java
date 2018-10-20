@@ -1,5 +1,8 @@
 package cn.itcast.travel.web.servlet;
 
+import cn.itcast.travel.service.UserService;
+import cn.itcast.travel.service.impl.UserServiceImpl;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,6 +21,23 @@ public class ActiveUserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 //        获取激活码
+        String code = request.getParameter("code");
+//        根据code 查找用户 先判断 code是否为null
+        if (code!=null){
+//      调用UserServiceImpl 查询
+        UserService service = new UserServiceImpl();
+        boolean flag = service.active(code);
+//        定义一个 字符串回显页面
+            String msg = null;
+        if (flag){
+//            true 激活成功
+            msg = "激活成功, 请<a href = 'login.html'>登录</a>";
+        }else {
+            msg = "激活失败,请联系管理员,或者重新注册.";
+        }
+        response.setContentType("text/html;charset=utf-8");
+        response.getWriter().write(msg);
+        }
 
     }
 

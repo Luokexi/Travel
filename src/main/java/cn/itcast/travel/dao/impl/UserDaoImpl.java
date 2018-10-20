@@ -19,6 +19,7 @@ public class UserDaoImpl implements UserDao {
 
     private JdbcTemplate template = new JdbcTemplate(JDBCUtils.getDataSource());
 
+
     /**
      * 根据用户名查询用户信息
      * @param username
@@ -26,7 +27,6 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public User findUserByUsername(String username) {
-
         User user = null;
         try {
 //        定义SQL
@@ -39,6 +39,8 @@ public class UserDaoImpl implements UserDao {
         }
         return user;
     }
+
+
     /**
      * 保存用户信息
      * @param user
@@ -46,8 +48,9 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void saveUser(User user) {
 //        定义SQL时 对应数据表中的字段顺序
-        String sql = "insert into tab_user (username,password,name,birthday,sex,telephone,email) " +
-                     "values(?,?,?,?,?,?,?)";
+        String sql = "insert into tab_user (username,password,name,birthday,sex,telephone,email,status,code) " +
+                     "values(?,?,?,?,?,?,?,?,?)";
+
         template.update(sql,
                 user.getUsername(),
                 user.getPassword(),
@@ -55,7 +58,47 @@ public class UserDaoImpl implements UserDao {
                 user.getBirthday(),
                 user.getSex(),
                 user.getTelephone(),
-                user.getEmail());
+                user.getEmail(),
+                user.getStatus(),
+                user.getCode());
+    }
 
+    /**
+     * 根据激活码查找用户
+     * @param code
+     * @return
+     */
+    @Override
+    public User findByCode(String code) {
+
+        User user = null;
+        try {
+//        SQL
+            String sql = "select * from tab_user where code = ?";
+            user = template.queryForObject(sql,new BeanPropertyRowMapper<User>(User.class),code);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
+    /**
+     * 修改用户的激活状态
+     * @param user
+     */
+    @Override
+    public void updateStatus(User user) {
+//        SQL 表  字段  属性
+        String sql = "update tab_user set status = 'Y' where uid = ?";
+        template.update(sql,user.getUid());
+
+    }
+
+    @Override
+    public User findUserByUsernameAndPassword(String username, String password) {
+//        SQL
+        String sql = "select * from tab_user where username = ? and password = ? ";
+        User user = template.queryForObject(sql, new BeanPropertyRowMapper<User>(User.class), username, password);
+        return user;
     }
 }

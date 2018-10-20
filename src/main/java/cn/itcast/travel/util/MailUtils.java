@@ -10,8 +10,8 @@ import java.util.Properties;
  */
 public final class MailUtils {
     // 发件人称号，同邮箱地址
-    private static final String USER = "1442477433@qq.com";
-    // 如果是qq邮箱可以使户端授权码，或者登录密码
+    private static final String USER = "liangjingxingxing@foxmail.com";
+    // 如果是qq邮箱可以是客户端授权码，或者登录密码
     private static final String PASSWORD = "htfsoysmsqaubaej";
 
     /**
@@ -69,8 +69,8 @@ public final class MailUtils {
     }
 
     public static void main(String[] args) throws Exception { // 做测试用
-//        MailUtils.sendMail("874613745@qq.com","你好，这是一封测试邮件，无需回复。","测试邮件");
-//        System.out.println("发送成功");
+        MailUtils.sendMail("17714575715@163.com","你好，这是一封测试邮件，无需回复。","测试邮件");
+        System.out.println("发送成功");
 //        for (int i = 0; i < 100; i++) {
 //            System.out.println("第"+i+"次");
 //            MailUtils.sendMail("2564893916@qq.com","你好，这是一封测试邮件，无需回复。","测试邮件");
