@@ -10,12 +10,16 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Random;
-
 /**
+ * @Author: Luokexi
+ * @Date: 2018/10/19 21:10
+ * 明确需求,整理思路,步步实现,规范编写,测试功能,总结经验.
  * 验证码
  */
+
 @WebServlet("/checkCode")
 public class CheckCodeServlet extends HttpServlet {
+	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		
 		//服务器通知浏览器不要缓存
@@ -40,8 +44,8 @@ public class CheckCodeServlet extends HttpServlet {
 		
 		//产生4个随机验证码，12Ey
 		String checkCode = getCheckCode();
-		//将验证码放入HttpSession中
-		request.getSession().setAttribute("CHECKCODE_SERVER",checkCode);
+		//将验证码放入HttpSession中  CHECKCODE_SERVER
+		request.getSession().setAttribute("checkCodeServer",checkCode);
 		
 		//设置画笔颜色为黄色
 		g.setColor(Color.YELLOW);
@@ -60,7 +64,7 @@ public class CheckCodeServlet extends HttpServlet {
 	 * 产生4位随机字符串 
 	 */
 	private String getCheckCode() {
-		String base = "0123456789ABCDEFGabcdefg";
+		String base = "0123456789ABCDEFGabcdefghijklmnopqrstuvwxyz";
 		int size = base.length();
 		Random r = new Random();
 		StringBuffer sb = new StringBuffer();
@@ -74,6 +78,7 @@ public class CheckCodeServlet extends HttpServlet {
 		}
 		return sb.toString();
 	}
+	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		this.doGet(request,response);
 	}

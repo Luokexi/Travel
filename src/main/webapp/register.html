@@ -9,21 +9,150 @@
 		<script src="js/jquery-3.3.1.js"></script>
 		<script>
 			// JS前端校验
-			// 表单提交校验 在表单提交的时候对所有方法的返回值进行判断 全为true才提交
-
 			$(function () {
+                //当用户离开输入框焦点的时候进行校验
+				$("#username").blur(checkUsername);
+				$("#password").blur(checkPassword);
+				$("#email").blur(checkEmail);
+				$("#name").blur(checkName);
+				$("#telephone").blur(checkTelephone);
+				$("#birthday").blur(checkBirthday);
+				$("#check").blur(checkCheckCode);
 
+			// 表单提交校验 在表单提交的时候对所有方法的返回值进行判断 全为true才提交
+				$("#registerForm").submit(function () {
+				    // 校验通过  发送 ajax 请求 使用 serialize 提交表单数据
+				    if (checkUsername()&& checkPassword()&& checkEmail()
+						               && checkName() && checkTelephone() && checkBirthday()
+						               && checkCheckCode()){
+				        $.post("registerUserServlet",$(this).serialize(),function(data){
 
+						});
+
+					}else {
+						return	false;
+					}
+                });
             });
 
 		//	用户名校验
 			function checkUsername() {
 			 //   jQ获取用户输入的值
 				var username = $("#username").val();
-			//	  定义正则 
-
-				
+                // 定义正则  正则规范 8-20个单词字母
+                var reg_username = /^\w{8,20}$/;
+                var flag = reg_username.test(username);
+                if (flag){
+                    // 校验通过
+                    $("#username").css("border","");
+                }else {
+                    //用户名非法,加一个红色边框
+                    $("#username").css("border","1px solid red");
+                }
+                return flag;
             }
+
+		//  密码校验
+			function checkPassword() {
+				var password = $("#password").val();
+                //2.定义正则
+                var reg_password = /^\w{8,20}$/;
+                //3.判断，给出提示信息
+                var flag = reg_password.test(password);
+                if(flag){
+                    //密码合法
+                    $("#password").css("border","");
+                }else{
+                    //密码非法,加一个红色边框
+                    $("#password").css("border","1px solid red");
+                }
+                return flag;
+            }
+
+         //   Email校验
+			function checkEmail() {
+			    var email = $("#email").val();
+			 //   定义正则
+				var reg_email = /^\w+@\w+\.\w+$/;
+			//	  判断
+				var flag = reg_email.test(email);
+				if (flag){
+				//    合法 css不变化
+					$("#email").css("border","");
+				}else {
+				//    非法加 红框
+                    $("#email").css("border","1px solid red");
+				}
+				return flag;
+            }
+
+		//  姓名校验 不能为空
+			function checkName() {
+                // 正则校验姓名 2-4个中文汉字
+				var reg_input = /^[\u4e00-\u9fa5]{2,4}$/;
+                var name = $("#name").val();
+                var flag = reg_input.test(name);
+				if(flag){
+                    // 不为空 不做任何样式改变
+                    $("#name").css("border","");
+				}else {
+                    //	为空  加红框
+                    $("#name").css("border","1px solid red");
+				}
+				return flag;
+            }
+
+            //   手机号校验
+            function checkTelephone() {
+                var telephone = $("#telephone").val();
+                //   定义正则
+                var reg_telephone = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
+                //	  判断
+                var flag = reg_telephone.test(telephone);
+                if (flag){
+                    //    合法 css不变化
+                    $("#telephone").css("border","");
+                }else {
+                    //    非法加 红框
+                    $("#telephone").css("border","1px solid red");
+                }
+                return flag;
+            }
+
+		// 出生日期校验
+			function checkBirthday() {
+			    var birthday = $("#birthday").val();
+                //   length长度是否为0  是否有空格 就为空
+                //  正则通过 为true 输入的为空
+				var reg_input = /^[\s]*$/;
+                var flag = false;
+                if(birthday.length == 0 || reg_input.test(birthday)){
+                    //	为空  加红框
+                    $("#birthday").css("border","1px solid red");
+                }else {
+                    // 不为空 不做任何样式改变
+                    $("#birthday").css("border","");
+                    flag = true;
+                }
+                return flag;
+            }
+		//	验证码输入框校验
+			function checkCheckCode() {
+			    var check = $("#check").val();
+                //   length长度是否为0  是否有空格 就为空
+                //  正则通过 为true 输入的为正则里的内容
+                var reg_input = /^[0-9a-zA-Z]+$/;
+                var flag = reg_input.test(check);
+                if(flag){
+                    //	flag为true 通过正则校验   不加红框
+                    $("#check").css("border","");
+                }else {
+                    // 不为true没通过 做样式改变
+                    $("#check").css("border","1px solid red");
+                }
+                return flag;
+            }
+
 		</script>
 
     </head>
@@ -40,7 +169,7 @@
     			<div class="rg_form_center">
 					
 					<!--注册表单-->
-    				<form id="registerForm">
+    				<form id="registerForm" action="registerUserServlet" method="post">
 						<!--提交处理请求的标识符-->
 						<input type="hidden" name="action" value="register">
     					<table style="margin-top: 25px;">
@@ -107,7 +236,7 @@
     							</td>
     							<td class="td_right check">
     								<input type="text" id="check" name="check" class="check">
-    								<img src="checkCode" height="32px" alt="" onclick="changeCheckCode(this)">
+    								<img src="checkCode" height="32px" alt="加载失败" onclick="changeCheckCode(this)">
 									<script type="text/javascript">
 										//图片点击事件
 										function changeCheckCode(img) {
