@@ -12,24 +12,21 @@ import java.io.IOException;
  * @Author: Luokexi
  * @Date: 2018/10/22 10:31
  * 明确需求,整理思路,步步实现,规范编写,测试功能,总结经验.
- * 用户退出
+ * 用户退出 已过时 抽取到UserServlet中
  */
-@WebServlet("/exitServlet")
+//@WebServlet("/exitServlet")
 public class ExitServlet extends HttpServlet {
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-//        后台销毁session中的数据
-        HttpSession httpSession = request.getSession();
-        httpSession.invalidate();
-//        response  login.html
-        response.sendRedirect(request.getContextPath()+"/login.html");
-
-
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        this.doPost(request, response);
-    }
+//    @Override
+//    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+////        后台销毁session中的数据
+//        HttpSession httpSession = request.getSession();
+//        httpSession.invalidate();
+////        response  login.html
+//        response.sendRedirect(request.getContextPath()+"/login.html");
+//    }
+//
+//    @Override
+//    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        this.doPost(request, response);
+//    }
 }

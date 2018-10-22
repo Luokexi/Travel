@@ -35,13 +35,18 @@ public class UserServiceImpl implements UserService {
         user.setStatus("N");
         userdao.saveUser(user);
 //        设置邮箱的正文  "" 里面是 ''
-        String content = "<a href='http://localhost/travel/activeUserServlet?code="+user.getCode()+"'>点击激活</a>";
+        String content = "<a href='http://localhost/travel/user/activeUser?code="+user.getCode()+"'>点击激活</a>";
 //      根据用户填写的邮箱 发送邮箱
         MailUtils.sendMail(user.getEmail(),content,"请您尽快激活.");
 //
         return true;
     }
 
+    /**
+     * 根据用户唯一激活码
+     * @param code
+     * @return
+     */
     @Override
     public boolean active(String code) {
 //        根据激活码查询用户对象
@@ -55,8 +60,14 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * 用户登陆根据用户名和密码查找用户
+     * @param user
+     * @return
+     */
     @Override
     public User login(User user) {
         return userdao.findUserByUsernameAndPassword(user.getUsername(),user.getPassword());
+
     }
 }

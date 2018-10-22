@@ -23,12 +23,11 @@
 		$(function () {
 			$("#btn_submit").click(function () {
 
-			    $.post("loginServlet",$("#loginForm").serialize(),function (data) {
-
+			    $.post("user/loginUser",$("#loginForm").serialize(),function (data) {
 			     //  data封装的ResultInfo 根据data的属性判断当前用户的登陆状态
 					if(data.flag){
 					//    flag 为 true 登陆成功 跳转到index.html
-						location.href =  "index.html";
+                        location.href="index.html";
 					}else {
 					//    登陆失败 给出错误提示 错误提示在 data.errorMsg中
 						$("#errorMsg").html(data.errorMsg);
@@ -55,7 +54,7 @@
         	<div class="login_inner">
 				<!--登录错误提示消息-->
         		<div id="errorMsg" class="alert alert-danger" ></div>
-				<form id="loginForm" action="/loginServlet" method="post" accept-charset="utf-8">
+				<form id="loginForm" action="" method="post" accept-charset="utf-8">
         			<input type="hidden" name="action" value="login"/>
 					<input name="username" type="text" placeholder="请输入账号" autocomplete="off">
         			<input name="password" type="text" placeholder="请输入密码" autocomplete="off">

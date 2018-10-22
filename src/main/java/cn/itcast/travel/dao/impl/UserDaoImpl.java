@@ -93,19 +93,30 @@ public class UserDaoImpl implements UserDao {
 
     }
 
+    /**
+     * 根据用户的用户名和密码查找用户
+     * @param username
+     * @param password
+     * @return
+     */
     @Override
     public User findUserByUsernameAndPassword(String username, String password) {
 
         User user = null;
-        //        SQL
-        String sql = "select * from tab_user where username = ? and password = ? ";
         try {
-             user = template.queryForObject(sql, new BeanPropertyRowMapper<User>(User.class), username, password);
-            return user;
-        } catch (DataAccessException e) {
+            //1.定义sql
+            String sql = "select * from tab_user where username = ? and password = ?";
+            //2.执行sql
+            user = template.queryForObject(sql, new BeanPropertyRowMapper<User>(User.class), username,password);
+            System.out.println("输入的用户名: "+username);
+            System.out.println("获取的用户名: "+user.getUsername());
+            System.out.println();
+            System.out.println();
+            System.out.println("输入的用户密码: "+password);
+            System.out.println("获取的用户密码: "+ user.getPassword());
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
         return user;
     }
 }
