@@ -21,6 +21,7 @@ import java.util.Map;
  * @Author: Luokexi
  * @Date: 2018/10/20 14:10
  * 明确需求,整理思路,步步实现,规范编写,测试功能,总结经验.
+ * 用户注册
  */
 @WebServlet("/registerUserServlet")
 public class RegisterUserServlet extends HttpServlet {

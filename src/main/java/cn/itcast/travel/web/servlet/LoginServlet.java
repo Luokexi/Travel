@@ -21,6 +21,7 @@ import java.util.Map;
  * @Author: Luokexi
  * @Date: 2018/10/21 0:34
  * 明确需求,整理思路,步步实现,规范编写,测试功能,总结经验.
+ * 用户登录
  */
 @WebServlet("/loginServlet")
 public class LoginServlet extends HttpServlet {
@@ -59,6 +60,7 @@ public class LoginServlet extends HttpServlet {
         }
 //        调用 UserServiceImpl 查询
         UserService service = new UserServiceImpl();
+//        返回查询的用户 loginUser
         User loginUser = service.login(user);
 //        封装对象返回 信息
         ResultInfo info = new ResultInfo();
@@ -78,7 +80,9 @@ public class LoginServlet extends HttpServlet {
         if ("Y".equals(loginUser.getStatus()) && loginUser!=null){
 //            成功
             info.setFlag(true);
-            info.setErrorMsg("注册成功.");
+//        存到session中回显 用户信息
+            HttpSession httpSession = request.getSession();
+            httpSession.setAttribute("user",loginUser);
         }
 //        响应数据
         ObjectMapper mapper = new ObjectMapper();

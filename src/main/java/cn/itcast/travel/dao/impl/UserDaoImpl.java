@@ -7,7 +7,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import javax.sql.DataSource;
 
 /**
  * @Author: Luokexi
@@ -96,9 +95,17 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User findUserByUsernameAndPassword(String username, String password) {
-//        SQL
+
+        User user = null;
+        //        SQL
         String sql = "select * from tab_user where username = ? and password = ? ";
-        User user = template.queryForObject(sql, new BeanPropertyRowMapper<User>(User.class), username, password);
+        try {
+             user = template.queryForObject(sql, new BeanPropertyRowMapper<User>(User.class), username, password);
+            return user;
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
+
         return user;
     }
 }

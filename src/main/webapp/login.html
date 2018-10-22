@@ -18,6 +18,26 @@
     <script src="js/angular.min.js"></script>
 	<!--导入jquery-->
 	<script src="js/jquery-3.3.1.js"></script>
+	<script>
+		// 获取 登录按钮 绑定点击事件 向loginServlet发送ajax,post请求 绑定表单数据 接收服务器响应数据
+		$(function () {
+			$("#btn_submit").click(function () {
+
+			    $.post("loginServlet",$("#loginForm").serialize(),function (data) {
+
+			     //  data封装的ResultInfo 根据data的属性判断当前用户的登陆状态
+					if(data.flag){
+					//    flag 为 true 登陆成功 跳转到index.html
+						location.href =  "index.html";
+					}else {
+					//    登陆失败 给出错误提示 错误提示在 data.errorMsg中
+						$("#errorMsg").html(data.errorMsg);
+					}
+                });
+            });
+
+        });
+	</script>
 </head>
 
 <body>
@@ -26,7 +46,6 @@
     <!-- 头部 end -->
     <section id="login_wrap">
         <div class="fullscreen-bg" style="background: url(images/login_bg.png);height: 532px;">
-        	
         </div>
         <div class="login-box">
         	<div class="title">
@@ -34,7 +53,6 @@
         		<span>欢迎登录黑马旅游账户</span>
         	</div>
         	<div class="login_inner">
-				
 				<!--登录错误提示消息-->
         		<div id="errorMsg" class="alert alert-danger" ></div>
 				<form id="loginForm" action="/loginServlet" method="post" accept-charset="utf-8">
@@ -52,7 +70,7 @@
 					</script>
 			</div>
 			<div class="submit_btn">
-        				<button type="button">登录</button>
+        				<button type="button" id="btn_submit">登录</button>
         				<div class="auto_login">
         					<input type="checkbox" name="" class="checkbox">
         					<span>自动登录</span>

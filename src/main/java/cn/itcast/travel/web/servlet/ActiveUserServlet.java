@@ -14,6 +14,7 @@ import java.io.IOException;
  * @Author: Luokexi
  * @Date: 2018/10/20 1:28
  * 明确需求,整理思路,步步实现,规范编写,测试功能,总结经验.
+ * 用户激活
  */
 @WebServlet("/activeUserServlet")
 public class ActiveUserServlet extends HttpServlet {

@@ -15,7 +15,7 @@ import java.util.Random;
  * @Author: Luokexi
  * @Date: 2018/10/19 21:10
  * 明确需求,整理思路,步步实现,规范编写,测试功能,总结经验.
- * 验证码
+ * 验证码生成
  */
 
 @WebServlet("/checkCode")

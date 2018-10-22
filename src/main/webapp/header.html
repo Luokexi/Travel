@@ -1,4 +1,21 @@
 <!-- 头部 start -->
+<!--发送异步请求-->
+<script>
+    $(function () {
+        //
+        $.get("findUserServlet",{},function (data) {
+            // 获取不到数据 就 返回
+            if (data.name == null){
+                return;
+            }
+        // data携带数据展示到 span_username上
+        //    拼接字符串  欢迎回来 +  date.name;
+            var span_str = "欢迎回来, " + data.name;
+            $("#span_username").html(span_str);
+        });
+    });
+
+</script>
     <header id="header">
         <div class="top_banner">
             <img src="images/top_banner.jpg" alt="">
@@ -11,10 +28,9 @@
             </div>
             <!-- 登录状态  -->
             <div class="login">
-            	
-                <span>欢迎回来，admin</span>
+                <span id="span_username"></span>
                 <a href="myfavorite.html" class="collection">我的收藏</a>
-                <a href="javascript:;">退出</a>
+                <a href="javascript:location.href='exitServlet';">退出</a>
             </div>
         </div>
         <div class="header_wrap">
