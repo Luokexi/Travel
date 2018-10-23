@@ -23,13 +23,13 @@ public class BaseServlet extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println(this);
+//        System.out.println(this);
 //        获取URI 根据URI 截取方法 执行方法
         String requestURI = req.getRequestURI();
 //        substring() 截取字符串包括开始的索引不包括结束的索引  lastIndexOf('/') 最后一次 / 出现的索引
         String method = requestURI.substring(requestURI.lastIndexOf('/')+1);
 
-        System.out.println("方法名: "+method);
+//        System.out.println("方法名: "+method);
 //        调用当前对象的字节码对象执行方法
         try {
             Method declaredMethod = this.getClass().getMethod(method, HttpServletRequest.class, HttpServletResponse.class);

@@ -9,6 +9,119 @@
     <link rel="stylesheet" type="text/css" href="css/common.css">
     <link rel="stylesheet" href="css/search.css">
     <script src="js/jquery-3.3.1.js"></script>
+    <script>
+
+        $(function () {
+            var search = location.search;
+            // 以 = 分割字符串 拿到 cid
+            var cid = search.split("=")[1];
+            load(cid);
+        });
+
+        function load(cid,currentPage) {
+            //cid 穿过来了 封装在请求参数里 是局部变量
+            $.get("route/pageQuery",{cid:cid,currentPage:currentPage},function (pageBean) {
+                //    设置所有页
+                $("#span_totalPage").html(pageBean.totalPage);
+                //    设置总记录数
+                $("#span_totalCount").html(pageBean.totalCount);
+                //    设置当前页码
+                $("#span_cuttentPage").html(pageBean.currentPage);
+
+                //    设置分页页码
+                //    首页
+                var firstPage = '<li onclick="load('+cid+',1)"><a href="javascript:void(0);">首页</a></li>';
+                //    计算上一页的页码 pageBean.currentPage -1
+                var beforeNum = pageBean.currentPage - 1;
+                if (beforeNum <= 1){
+                    beforeNum = 1;
+                }
+                //    上一页
+                var beforePage = '<li onclick="load('+cid+','+beforeNum+')" class="threeword"><a href="javascript:void(0)">上一页</a></li>';
+                var lis = '';
+                lis += firstPage;
+                lis += beforePage;
+
+                // 达成前5后4的页码展示效果
+                //定义开始位置
+                var begin;
+                //定义结束位置
+                var end;
+                // 前 5 后 4 的效果
+                //要显示10个 pageBean.currentPage 如果 不足10个
+                if (pageBean.totalPage < 10){
+                    begin = 1;
+                    end = pageBean.totalPage;
+                }else {
+                // 当前页 - 5 = 开始页 4 -5 = -1
+                    begin = pageBean.currentPage - 5;
+                    end = pageBean.currentPage + 4;
+                    // 如果开始值小于1的  前面不够5个
+                    if (begin <= 1){
+                        begin = 1;
+                        end = begin + 9
+                    }
+                //    后面不足4个
+                    if (end > pageBean.totalPage){
+                        end = pageBean.totalPage;
+                        begin = end - 9;
+                    }
+                }
+
+                // 从begin 开始循环 到 end 结束
+                for (var i = begin; i <=end; i++) {
+                        var li ;
+                        if (pageBean.currentPage == i){
+                         li = '<li class="curPage" onclick="load('+cid+','+i+');"><a href="#">'+i+'</a></li>';
+                        }else {
+                        li = '<li onclick="load('+cid+','+i+');"><a href="#">'+i+'</a></li>';
+                        }
+                        // 拼接字符串
+                        lis +=li;
+                }
+                var nextNum = pageBean.currentPage + 1;
+                if (nextNum>=pageBean.totalPage){
+                    nextNum = pageBean.totalPage;
+                }
+                var nextPage = '<li onclick="load('+cid+','+nextNum+')" class="threeword"><a href="javascript:void(0);">下一页</a></li>';
+                var lastPage = '<li onclick="load('+cid+','+pageBean.totalPage+')" class="threeword"><a href="javascript:void(0);">尾页</a></li>';
+                lis += nextPage;
+                lis += lastPage;
+                // lis.concat(nextPage).concat(lastPage);
+                //    将拼接的字符串设置到ul上
+                $("#page_number").html(lis);
+                //    分页数据的展示 pageBean.list.length();
+                var routes = "";
+                for (var i = 0; i <pageBean.list.length; i++) {
+                    // 获取list中的数据
+                    var route = pageBean.list[i];
+                    // '' 截断 ++ 拼接
+                    var  li = '<li>\n' +
+                        '                            <div class="img"><img src="'+route.rimage+'" alt="" style="width: 299px"></div>\n' +
+                        '                            <div class="text1">\n' +
+                        '                                <p>'+route.rname+'</p>\n' +
+                        '                                <br/>\n' +
+                        '                                <p>'+route.routeIntroduce+'</p>\n' +
+                        '                            </div>\n' +
+                        '                            <div class="price">\n' +
+                        '                                <p class="price_num">\n' +
+                        '                                    <span>&yen;</span>\n' +
+                        '                                    <span>'+route.price+'</span>\n' +
+                        '                                    <span>起</span>\n' +
+                        '                                </p>\n' +
+                        '                                <p><a href="route_detail.html">查看详情</a></p>\n' +
+                        '                            </div>\n' +
+                        '                        </li>';
+                    routes += li;
+                }
+                //    将字符串设置到ul上
+                $("#route").html(routes);
+
+                //定位到页面顶部 每次点击 页码时会跳到 当前页的(0,0)位置浏览
+                window.scrollTo(0,0);
+            });
+        }
+    </script>
 </head>
 <body>
 <!--引入头部-->
@@ -25,7 +138,7 @@
                         <span>商品信息</span>
                         <span class="jg">价格</span>
                     </div>
-                    <ul>
+                    <ul id="route">
                         <li>
                             <div class="img"><img src="images/04-search_03.jpg" alt=""></div>
                             <div class="text1">
@@ -157,10 +270,11 @@
                     </ul>
                     <div class="page_num_inf">
                         <i></i> 共
-                        <span>12</span>页<span>132</span>条
+                        <span id="span_totalPage"></span>页<span id="span_totalCount"></span>条
+                        当前第<span id="span_cuttentPage"></span>页
                     </div>
                     <div class="pageNum">
-                        <ul>
+                        <ul id="page_number">
                             <li><a href="">首页</a></li>
                             <li class="threeword"><a href="#">上一页</a></li>
                             <li><a href="#">1</a></li>

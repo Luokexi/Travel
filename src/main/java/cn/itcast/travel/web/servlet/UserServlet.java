@@ -27,8 +27,6 @@ public class UserServlet extends BaseServlet {
 
     // 声明成员变量 多处调用
     private UserService service = new UserServiceImpl();
-//
-    private BaseServlet base = new BaseServlet();
 
     /**
      * 用户注册
@@ -71,7 +69,7 @@ public class UserServlet extends BaseServlet {
             info.setErrorMsg("注册失败,用户名被占用");
         }
 //        将对象序列化为json字符串
-        base.writeValueAsString(info);
+        writeValueAsString(info);
     }
 
 
@@ -89,7 +87,7 @@ public class UserServlet extends BaseServlet {
             info.setFlag(false);
             info.setErrorMsg("验证码错误");
 //            将info 序列化为 JSON对象 响应给前台
-            base.writeValueAsString(info);
+            writeValueAsString(info);
             return true;
         }
         return false;
@@ -108,7 +106,7 @@ public class UserServlet extends BaseServlet {
         HttpSession httpSession = request.getSession();
         User user = (User) httpSession.getAttribute("user");
         if (user!=null){
-            base.writeValue(user,response);
+            writeValue(user,response);
         }
     }
 
@@ -136,7 +134,7 @@ public class UserServlet extends BaseServlet {
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(info);
             System.out.println("注册json字符串: "+json);
-            base.writeValueAsString(info);
+            writeValueAsString(info);
             return ;
         }
 //        获取用户名和密码
@@ -179,7 +177,7 @@ public class UserServlet extends BaseServlet {
             httpSession.setAttribute("user",loginUser);
         }
 //        响应数据
-        base.writeValue(info,response);
+        writeValue(info,response);
     }
 
     /**
