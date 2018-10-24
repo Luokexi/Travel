@@ -1,4 +1,6 @@
 <!-- 头部 start -->
+<!--导入getParameter工具类 分割字符串获取参数值-->
+<script src="js/getParameter.js"></script>
 <!--发送异步请求-->
 <script>
     $(function () {
@@ -28,6 +30,16 @@
         //    将拼接的内容设置到对应的标签的html中
             $("#category").html(head);
         });
+
+    //    获取路线搜索框 绑定点击事件
+        $("#search_btn").click(function () {
+            // 获取路线类别 cid
+            var cid = getParameter("cid");
+            // 获取搜索框里的值
+            var rname = $("#search_input").val();
+        //    跳转页面
+            location.href="http://localhost/travel/route_list.html?cid="+cid+"&rname="+rname;
+        });
     });
 
 </script>
@@ -54,8 +66,8 @@
                     <a href="/"><img src="images/logo.jpg" alt=""></a>
                 </div>
                 <div class="search">
-                    <input name="" type="text" placeholder="请输入路线名称" class="search_input" autocomplete="off">
-                    <a href="javascript:;" class="search-button">搜索</a>
+                    <input name="search_in" type="text" placeholder="请输入路线名称" class="search_input" autocomplete="off" id="search_input">
+                    <a href="javascript:;" class="search-button" id="search_btn">搜索</a>
                 </div>
                 <div class="hottel">
                     <div class="hot_pic">

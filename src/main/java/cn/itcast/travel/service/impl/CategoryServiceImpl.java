@@ -30,8 +30,6 @@ public class CategoryServiceImpl implements CategoryService {
 //        先去redis中查询数据 找不到就去数据库中查找
 //        获取Jedis的客户端 首先打开redis server
         Jedis jedis = JedisUtil.getJedis();
-//        用sorted set 查询 key 范围
-//        Set<String> categories = jedis.zrange("category", 0, -1);
         Set<Tuple> tupleSet = jedis.zrangeWithScores("category", 0, -1);
 //        将查询的数据转换成List
         List<Category> categoryList = null;
@@ -48,7 +46,6 @@ public class CategoryServiceImpl implements CategoryService {
             }
         }else {
 //        redis中数据不为空返回的是 Set 集合 需要的是List集合
-            System.out.println(" 到redis 中查询...");
             categoryList = new ArrayList<>();
 //           遍历Set 将数据存到 categoryList中返回
             for (Tuple tuple : tupleSet) {

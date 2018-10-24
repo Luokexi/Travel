@@ -25,10 +25,10 @@
 
 			    $.post("user/loginUser",$("#loginForm").serialize(),function (data) {
 			     //  data封装的ResultInfo 根据data的属性判断当前用户的登陆状态
-					if(data.flag){
+					if(data.flag == true){
 					//    flag 为 true 登陆成功 跳转到index.html
                         location.href="index.html";
-					}else {
+					}else{
 					//    登陆失败 给出错误提示 错误提示在 data.errorMsg中
 						$("#errorMsg").html(data.errorMsg);
 					}

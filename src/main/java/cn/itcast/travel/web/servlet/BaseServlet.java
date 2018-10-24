@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,15 +32,14 @@ public class BaseServlet extends HttpServlet {
 //        调用当前对象的字节码对象执行方法
         try {
             Method declaredMethod = this.getClass().getMethod(method, HttpServletRequest.class, HttpServletResponse.class);
-//            暴力反射
-//            declaredMethod.setAccessible(true);
-//            执行方法
             declaredMethod.invoke(this, req, resp);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (Exception e){
             e.printStackTrace();
         }
     }

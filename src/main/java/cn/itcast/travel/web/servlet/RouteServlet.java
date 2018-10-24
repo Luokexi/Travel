@@ -34,6 +34,12 @@ public class RouteServlet extends BaseServlet {
         String currentPageStr = request.getParameter("currentPage");
         String pageSizeStr = request.getParameter("pageSize");
         String cidStr = request.getParameter("cid");
+//        接收搜索框里 用户输入的线路名称  解决get请求 中文乱码问题
+        String rnameStr = request.getParameter("rname");
+        if ("null".equals(rnameStr)){
+            rnameStr = "";
+        }
+//        rname 不传递值 默认是 ?? 的情况
 //        对得到的数据进行处理  非空 长度不为0的判断
 //        当前页码是int类型的 获取数据的类型是String
         int currentPage = 1;
@@ -47,7 +53,7 @@ public class RouteServlet extends BaseServlet {
         }
 //        处理类别cid 参数
         int cid = 5;
-        if(cidStr != null && cidStr.length() > 0){
+        if(cidStr != null && cidStr.length() > 0 && !"null".equals(cidStr)){
             cid = Integer.parseInt(cidStr);
         }
 
@@ -61,9 +67,24 @@ public class RouteServlet extends BaseServlet {
         }
 
 //        调用RouteServiceImpl 查询 返回PageBean对象
-        PageBean<Route> routePageBean = routeService.pageQuery(cid, currentPage, pageSize);
+        PageBean<Route> routePageBean = routeService.pageQuery(cid, currentPage, pageSize,rnameStr);
 //        将PageBean序列化JSON对象 返回给前台
         writeValue(routePageBean,response);
     }
 
+
+    /**
+     * 根据 rid 查询路线图
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void findByRid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+
+//        获取 rid
+        String rid = request.getParameter("rid");
+//        调用 RouteServiceImpl 查询
+
+    }
 }

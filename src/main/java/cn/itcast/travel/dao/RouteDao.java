@@ -12,17 +12,19 @@ import java.util.List;
 public interface RouteDao {
 
     /**
-     * 根据类别 cid 查询总记录数
+     * 根据类别 cid 用户输入的路线名  查询总记录数
      * @param cid
+     * @param rname
      * @return
      */
-    int findTotalCount(int cid);
+    int findTotalCount(int cid, String rname);
     /**
      * 分页查询
      * @param cid
      * @param start
      * @param pageSize
+     * @param rname
      * @return
      */
-    public List<Route> findByPage(int cid, int start, int pageSize);
+    public List<Route> findByPage(int cid, int start, int pageSize, String rname);
 }

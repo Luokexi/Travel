@@ -72,7 +72,6 @@ public class UserServlet extends BaseServlet {
         writeValueAsString(info);
     }
 
-
     /**
      * 比较用户输入验证码和生成验证码
      * @param response
@@ -125,16 +124,12 @@ public class UserServlet extends BaseServlet {
         HttpSession session = request.getSession();
         String checkCode = (String) session.getAttribute("checkCode");
 //        比较验证码
-        if (checkCode ==null || !checkCode.equalsIgnoreCase(check)){
+        if (checkCode == null || !checkCode.equalsIgnoreCase(check)){
 //            验证码错误 或者生成验证码为空
             ResultInfo info = new ResultInfo();
             info.setFlag(false);
             info.setErrorMsg("验证码错误");
-//            序列化对象响应给前台
-            ObjectMapper mapper = new ObjectMapper();
-            String json = mapper.writeValueAsString(info);
-            System.out.println("注册json字符串: "+json);
-            writeValueAsString(info);
+            writeValue(info,response);
             return ;
         }
 //        获取用户名和密码
@@ -148,22 +143,21 @@ public class UserServlet extends BaseServlet {
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
-
-//        调用 UserServiceImpl 查询
-         service = new UserServiceImpl();
 //        返回查询的用户 loginUser
         User loginUser = service.login(user);
-        System.out.println("用户姓名: "+loginUser.getUsername());
-//        封装对象返回 信息
+        System.out.println(loginUser);
+//        封装对象返回信息
         ResultInfo info = new ResultInfo();
-//        loginUser 注册方法返回的 对象  为什么 loginUser
+//        loginUser 注册方法返回的 对象
         if (loginUser == null){
-//          loginUser为null 用户名密码错误 因为就返回这些内容
+//          loginUser为null 用户名密码错误
             info.setFlag(false);
             info.setErrorMsg("用户名或密码错误");
+            writeValue(info,response);
+            return;
         }
 //        如果用户名密码正确 再判断用户的激活状态
-        if (!"Y".equals(loginUser.getStatus()) && loginUser!=null){
+        if (loginUser!= null && !"Y".equals(loginUser.getStatus())&& !"null".equals(loginUser)){
 //            用户未激活
             info.setFlag(false);
             info.setErrorMsg("您尚未激活,请您激活");

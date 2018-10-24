@@ -33,8 +33,7 @@ public class UserDaoImpl implements UserDao {
 //      返回一个User
             user = template.queryForObject(sql, new BeanPropertyRowMapper<User>(User.class), username);
         } catch (DataAccessException e) {
-
-
+            e.printStackTrace();
         }
         return user;
     }
@@ -108,12 +107,6 @@ public class UserDaoImpl implements UserDao {
             String sql = "select * from tab_user where username = ? and password = ?";
             //2.执行sql
             user = template.queryForObject(sql, new BeanPropertyRowMapper<User>(User.class), username,password);
-            System.out.println("输入的用户名: "+username);
-            System.out.println("获取的用户名: "+user.getUsername());
-            System.out.println();
-            System.out.println();
-            System.out.println("输入的用户密码: "+password);
-            System.out.println("获取的用户密码: "+ user.getPassword());
         } catch (Exception e) {
             e.printStackTrace();
         }

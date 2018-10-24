@@ -9,18 +9,30 @@
     <link rel="stylesheet" type="text/css" href="css/common.css">
     <link rel="stylesheet" href="css/search.css">
     <script src="js/jquery-3.3.1.js"></script>
+    <!--导入getParameter工具类 分割字符串获取参数值-->
+    <script src="js/getParameter.js"></script>
     <script>
 
         $(function () {
-            var search = location.search;
-            // 以 = 分割字符串 拿到 cid
-            var cid = search.split("=")[1];
-            load(cid);
+            // 获取 cid参数值  从 header.html,index.html 页面来
+            var cid = getParameter("cid");
+
+            if (cid==null){
+                cid = 5;
+            }
+            var rname = getParameter("rname");
+            //判断rname如果不为null或者""
+            if(rname){
+                //url解码
+                rname = window.decodeURIComponent(rname);
+            }
+            // 发送异步请求 将 cid currentPage rname发给 route/pageQuery
+            load(cid,null,rname);
         });
 
-        function load(cid,currentPage) {
+        function load(cid,currentPage,rname) {
             //cid 穿过来了 封装在请求参数里 是局部变量
-            $.get("route/pageQuery",{cid:cid,currentPage:currentPage},function (pageBean) {
+            $.get("route/pageQuery",{cid:cid,currentPage:currentPage,rname:rname},function (pageBean) {
                 //    设置所有页
                 $("#span_totalPage").html(pageBean.totalPage);
                 //    设置总记录数
@@ -30,14 +42,14 @@
 
                 //    设置分页页码
                 //    首页
-                var firstPage = '<li onclick="load('+cid+',1)"><a href="javascript:void(0);">首页</a></li>';
+                var firstPage = '<li onclick="javascript:load('+cid+',1,\''+rname+'\')"><a href="#">首页</a></li>';
                 //    计算上一页的页码 pageBean.currentPage -1
                 var beforeNum = pageBean.currentPage - 1;
                 if (beforeNum <= 1){
                     beforeNum = 1;
                 }
                 //    上一页
-                var beforePage = '<li onclick="load('+cid+','+beforeNum+')" class="threeword"><a href="javascript:void(0)">上一页</a></li>';
+                var beforePage = '<li onclick="javascript:load('+cid+','+beforeNum+',\''+rname+'\')" class="threeword"><a href="#">上一页</a></li>';
                 var lis = '';
                 lis += firstPage;
                 lis += beforePage;
@@ -72,9 +84,9 @@
                 for (var i = begin; i <=end; i++) {
                         var li ;
                         if (pageBean.currentPage == i){
-                         li = '<li class="curPage" onclick="load('+cid+','+i+');"><a href="#">'+i+'</a></li>';
+                         li = '<li class="curPage" onclick="javascript:load('+cid+','+i+',\''+rname+'\');"><a href="#">'+i+'</a></li>';
                         }else {
-                        li = '<li onclick="load('+cid+','+i+');"><a href="#">'+i+'</a></li>';
+                        li = '<li onclick="load('+cid+','+i+',\''+rname+'\');"><a href="#">'+i+'</a></li>';
                         }
                         // 拼接字符串
                         lis +=li;
@@ -83,8 +95,8 @@
                 if (nextNum>=pageBean.totalPage){
                     nextNum = pageBean.totalPage;
                 }
-                var nextPage = '<li onclick="load('+cid+','+nextNum+')" class="threeword"><a href="javascript:void(0);">下一页</a></li>';
-                var lastPage = '<li onclick="load('+cid+','+pageBean.totalPage+')" class="threeword"><a href="javascript:void(0);">尾页</a></li>';
+                var nextPage = '<li onclick=" javascript:load('+cid+','+nextNum+',\''+rname+'\')" class="threeword"><a href="#">下一页</a></li>';
+                var lastPage = '<li onclick=" javascript:load('+cid+','+pageBean.totalPage+',\''+rname+'\')" class="threeword"><a href="#">尾页</a></li>';
                 lis += nextPage;
                 lis += lastPage;
                 // lis.concat(nextPage).concat(lastPage);
@@ -109,7 +121,7 @@
                         '                                    <span>'+route.price+'</span>\n' +
                         '                                    <span>起</span>\n' +
                         '                                </p>\n' +
-                        '                                <p><a href="route_detail.html">查看详情</a></p>\n' +
+                        '                                <p><a href="route_detail.html?rid='+route.rid+'">查看详情</a></p>\n' +
                         '                            </div>\n' +
                         '                        </li>';
                     routes += li;
