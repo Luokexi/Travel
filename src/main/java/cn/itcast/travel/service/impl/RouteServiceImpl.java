@@ -1,9 +1,15 @@
 package cn.itcast.travel.service.impl;
 
 import cn.itcast.travel.dao.RouteDao;
+import cn.itcast.travel.dao.RouteImgDao;
+import cn.itcast.travel.dao.SellerDao;
 import cn.itcast.travel.dao.impl.RouteDaoImpl;
+import cn.itcast.travel.dao.impl.RouteImgDaoImpl;
+import cn.itcast.travel.dao.impl.SellerDaoImpl;
 import cn.itcast.travel.domain.PageBean;
 import cn.itcast.travel.domain.Route;
+import cn.itcast.travel.domain.RouteImg;
+import cn.itcast.travel.domain.Seller;
 import cn.itcast.travel.service.RouteService;
 
 import java.util.List;
@@ -16,6 +22,8 @@ import java.util.List;
 public class RouteServiceImpl implements RouteService {
 
     private RouteDao routeDao = new RouteDaoImpl();
+    private RouteImgDao routeImgDao = new RouteImgDaoImpl();
+    private SellerDao sellerDao = new SellerDaoImpl();
 
     /**
      *  根据类别cid 分页查询数据
@@ -48,5 +56,24 @@ public class RouteServiceImpl implements RouteService {
 //        设置每页展示的数据
         pageBean.setList(routeList);
         return pageBean;
+    }
+
+    /**
+     * 调用 三个Dao层的实现类里的方法
+     * @param rid
+     * @return
+     */
+    @Override
+    public Route findOne(String rid) {
+
+//        根据 rid 查询 tab_route 对象
+        Route route = routeDao.findOne(Integer.parseInt(rid));
+//        根据 route id 查询 图片集合信息
+        List<RouteImg> routeImgList = routeImgDao.findByRid(route.getRid());
+        route.setRouteImgList(routeImgList);
+//        根据 route id
+        Seller seller = sellerDao.findByID(route.getSid());
+        route.setSeller(seller);
+        return route;
     }
 }
